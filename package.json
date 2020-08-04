@@ -1,0 +1,27 @@
+{
+  "name": "jitsi_keycloak",
+  "version": "0.0.1",
+  "build": 1,
+  "description": "Keycloak Authentication for Jitsi",
+  "keywords": [
+    "Keycloak",
+    "Jitsi"
+  ],
+  "repository": "SmartBlug/jitsi_keycloak",
+  "bugs": "https://github.com/SmartBlug/jitsi_keycloak/issues",
+  "main": "app.js",
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "kc": "NODE_ENV=keycloak node app.js"
+  },
+  "author": "SmartBlug <SmartBlug@SmartExtension.com>",
+  "contributors": [],
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs-promise": "^2.0.3",
+    "jsonwebtoken": "^8.5.1",
+    "keycloak-connect": "^11.0.0",
+    "morgan": "^1.10.0"
+  }
+}

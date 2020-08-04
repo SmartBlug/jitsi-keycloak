@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Jitsi Keycloak</title>
+  <link href="/assets/favicon.ico" rel="icon" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <link href="/assets/styles.css" rel="stylesheet">
+  <script src="/keycloak"></script>
+</head>
+
+<body>
+  <div id="username"></div>
+  <script>    
+    if (typeof Keycloak === "function" ) {
+      kc = Keycloak();
+      kc.init()
+        .success(function(authenticated) {
+          console.log('keycloak initialised');
+          if (kc.token) {
+            //console.log(kc.tokenParsed);
+            document.getElementById("username").innerHTML=kc.tokenParsed.name;
+            const room = document.location.pathname.split('/')[1];
+            if (room) {
+              fetch("/token/",
+              {
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  method: "POST",
+                  body: JSON.stringify({name: kc.tokenParsed.name, email: kc.tokenParsed.email, room:room})
+              })
+              .then(res => res.json())
+              .then(function(res){ 
+                document.location.href=res.url;
+              })
+              .catch(function(res){ console.log(res) })
+            }
+          }
+          else {
+            kc.login();
+          }
+        })
+        .error(function() {
+          console.error('failed to initialize keycloak');
+        });
+    }
+  </script>
+</body>
+
+</html>
