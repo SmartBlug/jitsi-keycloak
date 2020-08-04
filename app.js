@@ -11,6 +11,11 @@ const kc = new Keycloak({}, config.keycloak.back);
 
 const app = express();
 
+app.use(kc.middleware({
+  logout: '/logout',
+  admin: '/'
+})); 
+
 //*****************************************************
 
 //app.use(compression());
@@ -41,7 +46,7 @@ app.get('/keycloak.json', (req, res) => {
 });
 
 // Token
-app.post('/token', (req, res) => {
+app.post('/token',kc.protect(), (req, res) => {
   const data = {
     "context": {
       "user": {
