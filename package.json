@@ -1,7 +1,7 @@
 {
   "name": "jitsi_keycloak",
   "version": "0.0.1",
-  "build": 1,
+  "build": 3,
   "description": "Keycloak Authentication for Jitsi",
   "keywords": [
     "Keycloak",
@@ -14,7 +14,7 @@
     "start": "NODE_ENV=production node app.js",
     "kc": "NODE_ENV=keycloak node app.js"
   },
-  "author": "SmartBlug <SmartBlug@SmartExtension.com>",
+  "author": "Patrick Bouffel <patrick@bouffel.com>",
   "contributors": [],
   "license": "BSD-2-Clause",
   "dependencies": {

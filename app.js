@@ -25,15 +25,25 @@ if (config.accessLog) {
   app.use(morgan(config.accessLog));
 }
 
+/*app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});*/
+
 //*****************************************************
 
 // Static files
-app.use('/app', express.static(path.join(__dirname, './public/app')));
+//app.use('/app', express.static(path.join(__dirname, './public/app')));
 app.use('/assets', express.static(path.join(__dirname, './public/assets')));
 app.get('/robots.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './public/robots.txt'));
 });
 
+// Plugin
+app.get('/plugin', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/app/plugin.js'));
+});
 // Keycloak
 app.get('/keycloak', (req, res) => {
   if (config.keycloak.front) res.sendFile(path.join(__dirname, './public/app/keycloak.js'));
@@ -45,12 +55,24 @@ app.get('/keycloak.json', (req, res) => {
   res.end(JSON.stringify(keycloakFront));
 });
 
+/*function protectBySection(token, request) {
+  console.log(token);
+  //return token.hasRole( request.params.section );
+  
+}*/
+
+/*app.get('/me',kc.protect(), (req, res) => {
+  console.log(">Token:",kc.token);
+  res.json(kc.token);
+});*/
 // Token
+//app.post('/token',kc.protect('realm:famille'), (req, res) => {
+//app.post('/token',kc.protect(protectBySection), (req, res) => {
 app.post('/token',kc.protect(), (req, res) => {
-  const data = {
+    const data = {
     "context": {
       "user": {
-        "avatar": "https:/gravatar.com/avatar/abc123",
+        //"avatar": "https:/gravatar.com/avatar/abc123",
         "name": req.body.name,
         "email": req.body.email
       }
@@ -60,28 +82,40 @@ app.post('/token',kc.protect(), (req, res) => {
     "sub": config.jitsiURL,
     "room": req.body.room
   };
+
+  console.log(kc.token);
+  //res.header("Access-Control-Allow-Origin", "*");
+  //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   
   var token = jwt.sign(data, config.appSecret);
   res.json({
     room:req.body.room,
-    token:token,
+    //token:token,
     url:config.jitsiURL+'/'+req.body.room+'?jwt='+token,
     version: Package.version+' build '+Package.build
   });
+  //res.end();
 });
 
 // App
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   if (config.appPath !== '/') {
     res.status(304).redirect(config.appPath);
   } else {
     res.sendFile(path.join(__dirname, './public/html/index.html'));
   }
+});*/
+
+app.get('/retour/:room', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/html/retour.html'));
 });
+
+/*
 app.get('/:room', (req, res) => {
   console.log(req.params.room);
   res.sendFile(path.join(__dirname, './public/html/index.html'));
 });
+*/
 
 //*****************************************************
 
