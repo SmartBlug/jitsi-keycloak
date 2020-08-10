@@ -23,7 +23,7 @@ const config =  {
   "accessLog": ':date[iso] :method :url :status :response-time :remote-addr',
   "appId": "myappid",
   "appSecret": "myappsecret",
-  "jitsiURL": "https://meet.jitsi.com",
+  "jitsiUrl": "https://meet.jitsi.com",
   "keycloak": { front:null, back:{} }
 };
 

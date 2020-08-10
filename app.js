@@ -55,9 +55,9 @@ app.post('/token',kc.protect(), (req, res) => {
         "email": req.body.email
       }
     },
-    "aud": config.jitsiURL,
+    "aud": config.jitsiUrl,
     "iss": config.appId,
-    "sub": config.jitsiURL,
+    "sub": config.jitsiUrl,
     "room": req.body.room
   };
 

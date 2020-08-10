@@ -11,7 +11,10 @@
 Keycloak Plugin for Jitsi
 
 # Usage
-Keycloak parameters are defined in the config file or through the JITSI-KEYCLOAK_KEYCLOAK env variable
+Keycloak parameters are defined in the config file or through the env variable
+- JITSI-KEYCLOAK_APP_IP = 'myappid'
+- JITSI-KEYCLOAK_APP_SECRET = 'myappsecret'
+- JITSI-KEYCLOAK_KEYCLOAK
 ```
 {
     "front": {
@@ -32,7 +35,7 @@ Keycloak parameters are defined in the config file or through the JITSI-KEYCLOAK
     }
   }
 ```
-You also need to setup JITSI-KEYCLOAK_JITSI_URL with your jitsi server url (ex: "https://meet.mydomain.com")
+- JITSI-KEYCLOAK_JITSI_URL = 'https://meet.mydomain.com'
 
 # Installation
 ## Install Jitsi with last prosody support
@@ -150,21 +153,21 @@ sudo systemctl restart jitsi-videobridge2.service
 
 ## Configuration guest access
 
-### Configure Prosody
+- Configure Prosody
 ```
-nano /etc/prosody/conf.d/$(hostname -f).cfg.lua
+sudo nano /etc/prosody/conf.d/$(hostname -f).cfg.lua
 ```
-add new virtual host
+- Add new virtual host
 ```
 VirtualHost "guest.meet.mydomain.com"
     authentication = "anonymous"
     c2s_require_encryption = false
 ```
-### Add guest domain to Jitsi Meet frontend
+- Add guest domain to Jitsi Meet frontend
 ```
 sudo nano /etc/jitsi/meet/$(hostname -f)-config.js
 ```
-> add the directive anonymousdomain into your hosts object.
+- Add the directive anonymousdomain into your hosts object.
 ```
 hosts: {
   // XMPP domain.
@@ -174,7 +177,7 @@ hosts: {
   anonymousdomain: 'guest.meet.mydomain.com',
   ...
 ```
-### Change Jitsi Conference Focus
+- Change Jitsi Conference Focus
 ```
 sudo nano /etc/jitsi/jicofo/sip-communicator.properties
 ```
@@ -183,17 +186,13 @@ sudo nano /etc/jitsi/jicofo/sip-communicator.properties
 ...
 org.jitsi.jicofo.auth.URL=XMPP:meet.mydomain.com
 ```
-### Restart  all Jitsi services involved
-```
-service prosody restart
-service jicofo restart
-service jitsi-videobridge2 restart
-service nginx restart
-```
-
 
 ## Configure your NGINX
 - modify your nginx config (`/etc/nginx/sites-enabled/meet.mydomain.com.conf`)
+```
+sudo nano /etc/nginx/sites-enabled/$(hostname -f).conf
+```
+> Add
 ```
     # keycloak
     location = /keycloak/keycloak {
@@ -210,15 +209,34 @@ service nginx restart
 ```
 
 ## Modify Jitsi to add plugin
-- modify `/usr/share/jitsi-meet/plugin.head.html` with
+- modify `/usr/share/jitsi-meet/plugin.head.html`
+```
+sudo nano /usr/share/jitsi-meet/plugin.head.html
+```
+> Add
 ```
 <script src="/keycloak/plugin"></script>
 ```
 
+## Restart  all Jitsi services involved
+```
+sudo service prosody restart
+sudo service jicofo restart
+sudo service jitsi-videobridge2 restart
+sudo service nginx restart
+```
+
+## Install docker
+```
+sudo apt install -y docker.io
+sudo usermod -aG docker $USER
+```
+- Restart your shell session
+
 ## Run your docker with the keycloak parameters
 ```
 bash
-$ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"global","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' smartblug/jitsi-keycloak
+$ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_IP="myappid" -e JITSI-KEYCLOAK_APP_SECRET="myappsecret" -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' -i -d --restart always smartblug/jitsi-keycloak
 ```
 
 ## Enjoy your secured conferences
