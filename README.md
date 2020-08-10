@@ -240,7 +240,7 @@ sudo usermod -aG docker $USER
 ## Run your docker with the keycloak parameters
 ```
 bash
-$ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_IP="myappid" -e JITSI-KEYCLOAK_APP_SECRET="myappsecret" -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' -i -d --restart always smartblug/jitsi-keycloak
+$ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_ID="myappid" -e JITSI-KEYCLOAK_APP_SECRET="myappsecret" -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' -i -d --restart always smartblug/jitsi-keycloak
 ```
 
 ## Enjoy your secured conferences
