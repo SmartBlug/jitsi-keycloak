@@ -157,7 +157,7 @@ sudo systemctl restart jitsi-videobridge2.service
 ```
 sudo nano /etc/prosody/conf.d/$(hostname -f).cfg.lua
 ```
-- Add new virtual host
+> Add new virtual host
 ```
 VirtualHost "guest.meet.mydomain.com"
     authentication = "anonymous"
@@ -167,7 +167,7 @@ VirtualHost "guest.meet.mydomain.com"
 ```
 sudo nano /etc/jitsi/meet/$(hostname -f)-config.js
 ```
-- Add the directive anonymousdomain into your hosts object.
+> Add the directive anonymousdomain into your hosts object.
 ```
 hosts: {
   // XMPP domain.
@@ -176,6 +176,10 @@ hosts: {
   // When using authentication, domain for guest users.
   anonymousdomain: 'guest.meet.mydomain.com',
   ...
+```
+> [optional] require display name for your guest, this is more friendly.
+```
+    requireDisplayName: true,
 ```
 - Change Jitsi Conference Focus
 ```
