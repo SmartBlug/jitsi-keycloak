@@ -4,37 +4,26 @@ const morgan = require('morgan');
 const Package = require('./package.json');
 const path = require('path');
 const bodyParser = require('body-parser');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const Keycloak = require('keycloak-connect')
 const kc = new Keycloak({}, config.keycloak.back);
 
 const app = express();
 
-app.use(kc.middleware({
-  logout: '/logout',
-  admin: '/'
-})); 
-
 //*****************************************************
 
-//app.use(compression());
+app.use(kc.middleware());
 app.use(bodyParser.json());
 
 if (config.accessLog) {
   app.use(morgan(config.accessLog));
 }
 
-/*app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});*/
-
 //*****************************************************
 
 // Static files
-//app.use('/app', express.static(path.join(__dirname, './public/app')));
+app.use('/app', express.static(path.join(__dirname, './public/app')));
 app.use('/assets', express.static(path.join(__dirname, './public/assets')));
 app.get('/robots.txt', (req, res) => {
   res.sendFile(path.join(__dirname, './public/robots.txt'));
@@ -55,19 +44,8 @@ app.get('/keycloak.json', (req, res) => {
   res.end(JSON.stringify(keycloakFront));
 });
 
-/*function protectBySection(token, request) {
-  console.log(token);
-  //return token.hasRole( request.params.section );
-  
-}*/
 
-/*app.get('/me',kc.protect(), (req, res) => {
-  console.log(">Token:",kc.token);
-  res.json(kc.token);
-});*/
 // Token
-//app.post('/token',kc.protect('realm:famille'), (req, res) => {
-//app.post('/token',kc.protect(protectBySection), (req, res) => {
 app.post('/token',kc.protect(), (req, res) => {
     const data = {
     "context": {
@@ -84,38 +62,14 @@ app.post('/token',kc.protect(), (req, res) => {
   };
 
   console.log(kc.token);
-  //res.header("Access-Control-Allow-Origin", "*");
-  //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   
   var token = jwt.sign(data, config.appSecret);
   res.json({
     room:req.body.room,
-    //token:token,
-    url:config.jitsiURL+'/'+req.body.room+'?jwt='+token,
+    token:token,
     version: Package.version+' build '+Package.build
   });
-  //res.end();
 });
-
-// App
-/*app.get('/', (req, res) => {
-  if (config.appPath !== '/') {
-    res.status(304).redirect(config.appPath);
-  } else {
-    res.sendFile(path.join(__dirname, './public/html/index.html'));
-  }
-});*/
-
-app.get('/retour/:room', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/html/retour.html'));
-});
-
-/*
-app.get('/:room', (req, res) => {
-  console.log(req.params.room);
-  res.sendFile(path.join(__dirname, './public/html/index.html'));
-});
-*/
 
 //*****************************************************
 
@@ -123,8 +77,8 @@ let server;
 if(config.port) {
   // HTTP Server
   server = app.listen(config.port, config.iface, () => {
-    console.log(Package.name,`listening on http://${config.iface}:${config.port}`);
-    if (config.keycloak.front) console.log(`Keycloak activated`);
+    console.log(Package.name,Package.version,'build',Package.build,`listening on http://${config.iface}:${config.port}`);
+    if (config.keycloak.front) console.log(`Keycloak activated on ${config.keycloak.back["auth-server-url"]}realms/${config.keycloak.back["realm"]}`);
   });
 }
 
@@ -137,8 +91,8 @@ if(config.sslPort && config.sslKeyFile && config.sslCertFile) {
   };
   httpsServer = https.createServer(sslOpts, app)
     .listen(config.sslPort, config.iface, () => {
-      console.log(Package.name,`listening on https://${config.iface}:${config.sslPort}`);
-      if (config.keycloak.front) console.log(`Keycloak activated`);
+      console.log(Package.name,Package.version,'build',Package.build,`listening on https://${config.iface}:${config.sslPort}`);
+      if (config.keycloak.front) console.log(`Keycloak activated on ${config.keycloak.back["auth-server-url"]}realms/${config.keycloak.back["realm"]}`);
     });
 }
 

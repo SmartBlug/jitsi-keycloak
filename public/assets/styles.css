@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+.welcome-page-settings div {
+  float: left;
+}
+.keycloak svg {
+  height: 24px;
+  width: 24px;
+  margin: 0 10px;
+}
+.keycloak .name {
+  font-size: 18px;
+  height: 24px;
+}
