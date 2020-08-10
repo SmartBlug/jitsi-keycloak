@@ -1,6 +1,7 @@
 'use strict';
 const path = require('path');
 const fsp = require('fs-promise');
+const Package = require('./package.json');
 
 // Default Config
 // Do not edit this, generate a config.<ENV>.js for your NODE_ENV
@@ -35,7 +36,7 @@ if(process.env.NODE_ENV && fsp.existsSync(envConfFile)) {
 // Load config from ENV VARS
 let envName;
 for (let k in config) {
-  envName = 'JITSI_KEYCLOAK_'+ k.replace(/([A-Z])/g, $1 => "_" + $1).toUpperCase();
+  envName = Package.name.toUpperCase() + "_" + k.replace(/([A-Z])/g, $1 => "_" + $1).toUpperCase();
   if(process.env[envName]) {
     if(typeof config[k] === 'number') {
       config[k] = parseInt(process.env[envName], 10);
