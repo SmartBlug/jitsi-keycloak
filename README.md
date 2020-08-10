@@ -76,7 +76,7 @@ sudo apt -y install certbot
 
 sudo /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
 ```
-> enter contact@ztag.me
+> enter contact@mydomain.com
 - Install jitsi-meet-tokens
 ```
 sudo apt-get -y install jitsi-meet-tokens
