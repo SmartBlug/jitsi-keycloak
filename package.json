@@ -1,7 +1,7 @@
 {
   "name": "jitsi-keycloak",
   "version": "1.0.0",
-  "build": 11,
+  "build": 12,
   "description": "Keycloak Authentication for Jitsi",
   "keywords": [
     "Keycloak",

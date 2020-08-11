@@ -12,7 +12,7 @@ Keycloak Plugin for Jitsi
 
 # Usage
 Keycloak parameters are defined in the config file or through the env variable
-- JITSI-KEYCLOAK_APP_IP = 'myappid'
+- JITSI-KEYCLOAK_APP_ID = 'myappid'
 - JITSI-KEYCLOAK_APP_SECRET = 'myappsecret'
 - JITSI-KEYCLOAK_KEYCLOAK
 ```
