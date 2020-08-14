@@ -50,7 +50,7 @@ Keycloak parameters are defined in the config file or through the env variable
 - Start with a fresh Ubuntu 18.04.4
 - wget installation script and run
 ```
-wget -O - https://github.com/SmartBlug/jitsi-keycloak/blob/master/scripts/install.sh | bash
+wget -O - https://raw.githubusercontent.com/SmartBlug/jitsi-keycloak/master/scripts/install.sh | bash
 ```
 - answer questions while the script will execute
 > Your password for sudo<br>
