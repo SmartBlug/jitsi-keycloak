@@ -50,7 +50,6 @@ app.post('/token',kc.protect(), (req, res) => {
     const data = {
     "context": {
       "user": {
-        //"avatar": "https:/gravatar.com/avatar/abc123",
         "name": req.body.name,
         "email": req.body.email
       }
@@ -61,8 +60,6 @@ app.post('/token',kc.protect(), (req, res) => {
     "room": req.body.room
   };
 
-  console.log(kc.token);
-  
   var token = jwt.sign(data, config.appSecret);
   res.json({
     room:req.body.room,

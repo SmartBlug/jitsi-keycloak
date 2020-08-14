@@ -12,8 +12,9 @@ Keycloak Plugin for Jitsi
 
 # Usage
 Keycloak parameters are defined in the config file or through the env variable
-- JITSI-KEYCLOAK_APP_ID = 'myappid'
-- JITSI-KEYCLOAK_APP_SECRET = 'myappsecret'
+- JITSI-KEYCLOAK_APP_ID = `'myappid'`
+- JITSI-KEYCLOAK_APP_SECRET = `'myappsecret'`
+- JITSI-KEYCLOAK_JITSI_URL = `'https://meet.mydomain.com'`
 - JITSI-KEYCLOAK_KEYCLOAK
 ```
 {
@@ -35,9 +36,36 @@ Keycloak parameters are defined in the config file or through the env variable
     }
   }
 ```
-- JITSI-KEYCLOAK_JITSI_URL = 'https://meet.mydomain.com'
+## How to use
+- Start a conference with your favorite URL `https://meet.mydomain.com/myconference` or through the portal `https://meet.mydomain.com`
+- If you are a guest, just wait
+- If you are the host, press "I am the host" and you'll be authenticated through your keycloak server
+- If you are already authenticated, just go in the room
 
-# Installation
+## Tips
+- You can also sign in or sign out through the portal `https://meet.mydomain.com`
+- Your displayed name will be your "real" name comming from keycloak
+
+# Automatic Installation
+- Start with a fresh Ubuntu 18.04.4
+- wget installation script and run
+```
+wget -O - https://github.com/SmartBlug/jitsi-keycloak/blob/master/scripts/install.sh | bash
+```
+- answer questions while the script will execute
+> Your password for sudo<br>
+> Your server url : `meet.mydomain.com`<br>
+> Chose `create a new self-signed certificate`<br>
+> Enter your email to create letsencrypt certificate<br>
+> Enter your APP ID : `myappid`<br>
+> Enter your APP Secret : `myappsecret`<br>
+- launch your docker
+```
+$ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_ID="myappid" -e JITSI-KEYCLOAK_APP_SECRET="myappsecret" -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' -i -d --restart always smartblug/jitsi-keycloak
+```
+- enjoy
+
+# Manual Installation
 ## Install Jitsi with last prosody support
 - Add dns for meet.mydomain.com to point to your vm public ip
 - Open ports on network security group
@@ -239,14 +267,7 @@ sudo usermod -aG docker $USER
 
 ## Run your docker with the keycloak parameters
 ```
-bash
 $ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_ID="myappid" -e JITSI-KEYCLOAK_APP_SECRET="myappsecret" -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' -i -d --restart always smartblug/jitsi-keycloak
 ```
 
-## Enjoy your secured conferences
-- Use on of the 2 options :
-    - Connect to your https://meet.mydomain.com/ and use the 
-    "Sign In" button
-    - Go directly in a room and press the "I am the host" button...
-
-- In both case, you'll be redirected to your keycloak server and then enjoy your conference
+## Enjoy
