@@ -50,10 +50,10 @@ Keycloak parameters are defined in the config file or through the env variable
 - Start with a fresh Ubuntu 18.04.4
 - wget installation script and run
 ```
-wget -O - https://raw.githubusercontent.com/SmartBlug/jitsi-keycloak/master/scripts/install.sh | bash
+bash <(wget -qO- https://raw.githubusercontent.com/SmartBlug/jitsi-keycloak/master/scripts/install.sh)
 ```
 - answer questions while the script will execute
-> Your password for sudo<br>
+> Your password for sudo (if needed)<br>
 > Your server url : `meet.mydomain.com`<br>
 > Chose `create a new self-signed certificate`<br>
 > Enter your email to create letsencrypt certificate<br>
@@ -120,7 +120,8 @@ sudo nano /etc/prosody/prosody.cfg.lua
 ```
 > change c2s_require_encryption=false
 ```
-sudo nano /etc/prosody/conf.avail/meet.mydomain.com.cfg.lua
+sudo nano /etc/prosody/conf.avail/$(hostname -f).cfg.lua
+
 ```
 > authentication="token"<br>
 > app_id="myappid"<br>
