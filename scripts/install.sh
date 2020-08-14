@@ -26,7 +26,7 @@ HOSTNAME=$(cat /tmp/hostname)
 
 sudo hostnamectl set-hostname $HOSTNAME
 
-sudo add-apt-repository -y ppa:certbot/certbot
+sudo add-apt-repository ppa:certbot/certbot
 sudo apt -y install certbot
 
 sudo /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
@@ -71,6 +71,8 @@ sudo luarocks make
 cdback
 rm /tmp/cdlua
 sudo luarocks install luajwtjitsi
+sudo rm -r lua-cjson*
+
 # install again
 sudo apt-get install -y jitsi-meet jitsi-meet-tokens
 sudo rm /var/log/prosody/prosody.err
@@ -99,3 +101,6 @@ sudo apt install -y docker.io
 sudo usermod -aG docker $USER
 # Install jitsi-keycloak image
 sudo docker pull smartblug/jitsi-keycloak
+# Prepare socker stript
+echo -e $'docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_ID="'$APP_ID'" -e JITSI-KEYCLOAK_APP_SECRET="'$APP_SECRET'" -e JITSI-KEYCLOAK_JITSI_URL="https://'$(hostname -f)$'" -e JITSI-KEYCLOAK_KEYCLOAK=\'{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}\' -i -d --restart always smartblug/jitsi-keycloak' > start.sh
+chmod u+x start.sh

@@ -59,7 +59,7 @@ wget -O - https://raw.githubusercontent.com/SmartBlug/jitsi-keycloak/master/scri
 > Enter your email to create letsencrypt certificate<br>
 > Enter your APP ID : `myappid`<br>
 > Enter your APP Secret : `myappsecret`<br>
-- launch your docker
+- launch your docker (you now have a `start.sh` script that you can easily modify if you prefer)
 ```
 $ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_ID="myappid" -e JITSI-KEYCLOAK_APP_SECRET="myappsecret" -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' -i -d --restart always smartblug/jitsi-keycloak
 ```
