@@ -18,23 +18,23 @@ Keycloak parameters are defined in the config file or through the env variable
 - JITSI-KEYCLOAK_KEYCLOAK
 ```
 {
-    "front": {
-      "realm": "realm_meet",
-      "auth-server-url": "https://iam.mydomain.com/auth/",
-      "ssl-required": "external",
-      "resource": "frontend_meet",
-      "public-client": true,
-      "confidential-port": 0
-    },
-    "back": {
-      "realm": "realm_meet",
-      "bearer-only": true,
-      "auth-server-url": "https://iam.mydomain.com/auth/",
-      "ssl-required": "external",
-      "resource": "backend_meet",
-      "confidential-port": 0
-    }
+  "front": {
+    "realm": "realm_meet",
+    "auth-server-url": "https://iam.mydomain.com/auth/",
+    "ssl-required": "external",
+    "resource": "frontend_meet",
+    "public-client": true,
+    "confidential-port": 0
+  },
+  "back": {
+    "realm": "realm_meet",
+    "bearer-only": true,
+    "auth-server-url": "https://iam.mydomain.com/auth/",
+    "ssl-required": "external",
+    "resource": "backend_meet",
+    "confidential-port": 0
   }
+}
 ```
 ## How to use
 - Start a conference with your favorite URL `https://meet.mydomain.com/myconference` or through the portal `https://meet.mydomain.com`
@@ -63,6 +63,27 @@ bash <(wget -qO- https://raw.githubusercontent.com/SmartBlug/jitsi-keycloak/mast
 ```
 $ docker run -p 0.0.0.0:3000:3000 -e JITSI-KEYCLOAK_APP_ID="myappid" -e JITSI-KEYCLOAK_APP_SECRET="myappsecret" -e JITSI-KEYCLOAK_JITSI_URL="https://meet.mydomain.com" -e JITSI-KEYCLOAK_KEYCLOAK='{"front":{"realm":"realm_meet","auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"frontend_meet","public-client":true,"confidential-port":0},"back":{"realm":"realm_meet","bearer-only":true,"auth-server-url":"https://iam.mydomain.com/auth","ssl-required":"external","resource":"backend_meet","confidential-port":0}}' -i -d --restart always smartblug/jitsi-keycloak
 ```
+- enjoy
+
+# Automatic Installation with no keycloak
+- Start with a fresh Ubuntu 18.04.4
+- wget installation script and run
+```
+bash <(wget -qO- https://raw.githubusercontent.com/SmartBlug/jitsi-keycloak/master/scripts/install-no-keycloak.sh)
+```
+- answer questions while the script will execute
+> Your password for sudo (if needed)<br>
+> Your server url : `meet.mydomain.com`<br>
+> Chose `create a new self-signed certificate`<br>
+> Enter your email to create letsencrypt certificate<br>
+> Enter your url containing custom files
+- In the folder of the url, you need
+  - watermark.png
+  - logo.png
+  - favicon.ico
+  - ssh (with the SSH key to add to .ssh/authorized_keys)
+  - redirect (with redirect url when you click on the logo ex:"https:\/\/www.sample.com")
+
 - enjoy
 
 # Manual Installation
