@@ -19,7 +19,7 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "chromedriver": "^87.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fs-promise": "^2.0.3",
     "jsonwebtoken": "^8.5.1",
     "keycloak-connect": "^11.0.0",
